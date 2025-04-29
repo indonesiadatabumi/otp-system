@@ -7,7 +7,7 @@
     },
     "servers": [
         {
-            "url": "http://localhost:20615",
+            "url": "http://66.96.229.251:20615",
             "description": "Production Server"
         },
         {
