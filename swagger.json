@@ -1,0 +1,145 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "OTP Verification API",
+        "version": "1.0.0",
+        "description": "API for sending, verifying OTPs via Email/WhatsApp, AI recommendations, and Admin dashboard."
+    },
+    "servers": [
+        {
+            "url": "http://localhost:20615",
+            "description": "Production Server"
+        },
+        {
+            "url": "http://localhost:3000",
+            "description": "Local Server"
+        }
+    ],
+    "paths": {
+        "/send-otp": {
+            "post": {
+                "summary": "Send OTP",
+                "description": "Send OTP to Email or WhatsApp based on target input.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "target": {
+                                        "type": "string",
+                                        "example": "user@example.com"
+                                    }
+                                },
+                                "required": [
+                                    "target"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OTP sent successfully."
+                    },
+                    "400": {
+                        "description": "Missing or invalid target."
+                    },
+                    "429": {
+                        "description": "Rate limit exceeded."
+                    }
+                }
+            }
+        },
+        "/verify-otp": {
+            "post": {
+                "summary": "Verify OTP",
+                "description": "Verify a submitted OTP for the given target.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "target": {
+                                        "type": "string",
+                                        "example": "user@example.com"
+                                    },
+                                    "otp": {
+                                        "type": "string",
+                                        "example": "123456"
+                                    }
+                                },
+                                "required": [
+                                    "target",
+                                    "otp"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OTP verified successfully."
+                    },
+                    "400": {
+                        "description": "Missing input or invalid OTP."
+                    }
+                }
+            }
+        },
+        "/recommendation": {
+            "get": {
+                "summary": "Get Recommendation",
+                "description": "Get AI-based recommendation on the user's OTP behavior.",
+                "parameters": [
+                    {
+                        "name": "target",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "user@example.com"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Recommendation data returned."
+                    },
+                    "400": {
+                        "description": "Missing target."
+                    }
+                }
+            }
+        },
+        "/dashboard": {
+            "get": {
+                "summary": "Admin Dashboard",
+                "description": "View system stats: active OTPs, top requesters, top failures, suspicious users.",
+                "parameters": [
+                    {
+                        "name": "x-api-key",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "your_secret_admin_api_key"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Dashboard data returned."
+                    },
+                    "403": {
+                        "description": "Forbidden. Missing or invalid admin API key."
+                    }
+                }
+            }
+        }
+    },
+    "components": {}
+}

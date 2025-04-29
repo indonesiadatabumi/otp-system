@@ -1,0 +1,17 @@
+{
+  "name": "otp-system",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.9.0",
+    "body-parser": "^2.2.0",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "nodemailer": "^6.10.1",
+    "rate-limiter-flexible": "^7.1.0",
+    "redis": "^4.7.0",
+    "swagger-ui-express": "^5.0.1"
+  }
+}
