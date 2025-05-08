@@ -171,7 +171,8 @@ app.post('/send-otp', async (req, res) => {
 
 app.post('/verify-otp', async (req, res) => {
     const { target, otp } = req.body;
-
+    console.log(`target ${target}`);
+    console.log(`otp ${otp}`);
     const valid = await verifyOTP(target, otp);
 
     if (valid) {
@@ -216,6 +217,31 @@ app.get('/recommendation', async (req, res) => {
     res.status(200).json({ recommendations });
 });
 
+app.get('/logs', async (req, res) => {
+    try {
+        const db = await connectMongo();
+        const logs = await db.collection('logs').find().sort({ timestamp: -1 }).limit(100).toArray();
+        res.json(logs);
+    } catch (err) {
+        res.status(500).json({ message: 'Failed to load logs' });
+    }
+});
+
+app.get('/logs/export', async (req, res) => {
+    try {
+        const db = await connectMongo();
+        const logs = await db.collection('logs').find().toArray();
+
+        const parser = new Parser();
+        const csv = parser.parse(logs);
+
+        res.header('Content-Type', 'text/csv');
+        res.attachment('otp-logs.csv');
+        return res.send(csv);
+    } catch (err) {
+        res.status(500).json({ message: 'Export failed' });
+    }
+});
 
 // ===== SERVER START =====
 const PORT = process.env.PORT || 3000;
